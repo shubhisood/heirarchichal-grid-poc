@@ -4,11 +4,13 @@ import {
     IgxHierarchicalGridComponent,
     IgxRowIslandComponent,
     IGridEditEventArgs,
-    IgxToastComponent
+    IgxToastComponent,
+    IgxActionStripComponent, IPinningConfig, RowPinningPosition, ColumnPinningPosition, IGridCellEventArgs
 } from "igniteui-angular";
 import { IDataState, RemoteLoDService } from "./services/data-load.service";
 import { Subject } from 'rxjs';
 import { takeUntil } from "rxjs/operators";
+import { Console } from 'console';
 
 @Component({
     providers: [RemoteLoDService],
@@ -23,6 +25,10 @@ export class HierarchicalGridLoDSampleComponent implements AfterViewInit {
     public toast: IgxToastComponent;
     
     private destroy$ = new Subject();
+
+    public pinningConfig: IPinningConfig = { rows: RowPinningPosition.Top, columns: ColumnPinningPosition.End };
+    @ViewChild(IgxActionStripComponent, { static: true })
+    public actionStrip: IgxActionStripComponent;
     
 
     constructor(private remoteService: RemoteLoDService) { }
@@ -94,6 +100,8 @@ export class HierarchicalGridLoDSampleComponent implements AfterViewInit {
                 //this.toast.show("The launch date must be in the past!");
                 event.cancel = true;
             }
+        } else if(column.field === "ShipCountry"){
+            event.cancel = true;
         }
     }
     public handleRowSelection(event) {
@@ -104,5 +112,35 @@ export class HierarchicalGridLoDSampleComponent implements AfterViewInit {
 
     public handleCreate(event: IGridCreatedEventArgs) {
         event.grid.onCellEdit.pipe(takeUntil(this.destroy$)).subscribe((e) => this.handleCellEdit(e));
+    }
+
+    public onMouseLeave(actionStrip: IgxActionStripComponent, event?) {
+        if (!event || !event.relatedTarget || event.relatedTarget.nodeName.toLowerCase() !== "igx-drop-down-item") {
+            actionStrip.hide();
+        }
+    }
+
+    public changePinningPosition() {
+        if (this.pinningConfig.rows === RowPinningPosition.Bottom) {
+            this.pinningConfig = { columns: this.pinningConfig.columns, rows: RowPinningPosition.Top };
+        } else {
+            this.pinningConfig = { columns: this.pinningConfig.columns, rows: RowPinningPosition.Bottom };
+        }
+    }
+
+    public onMouseOver(actionStrip: IgxActionStripComponent, hierarchicalGrid: IgxHierarchicalGridComponent, event) {
+        const target = event.target;
+        if (target.nodeName.toLowerCase() === "igx-hierarchical-grid-cell") {
+            const gridId = target.parentNode.parentNode.attributes["ng-reflect-grid-i-d"].value;
+            const grid = hierarchicalGrid.hgridAPI.getChildGrids(true)
+                .find(childGrid => childGrid.id === gridId) || hierarchicalGrid;
+            const rowIndex = parseInt(target.attributes["data-rowindex"].value, 10);
+            const row = grid.getRowByIndex(rowIndex);
+            actionStrip.show(row);
+        }
+    }
+
+    public onCellClick(args: IGridCellEventArgs) {
+        this.actionStrip.show(args.cell.row);
     }
 }

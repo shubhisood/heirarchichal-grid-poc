@@ -1,4 +1,4 @@
-<div class="grid__wrapper">
+<div [style.height]="'100%'" class="grid__wrapper">
     <igx-hierarchical-grid igxPreventDocumentScroll
       #hGrid 
       [primaryKey]="'CustomerID'" 
@@ -6,22 +6,31 @@
       [height]="'100%'"
       [columnPinning]='true'
       (onCellEdit)="handleCellEdit($event)"
-      [rowSelection]="'single'"
       (onRowSelectionChange)="handleRowSelection($event)"
-      [allowFiltering]="true"
-      [width]="'100%'">
+       [width]="'100%'"
+       [pinning]='pinningConfig'
+       (mouseleave)="onMouseLeave(actionStrip1, $event)"
+       [cellSelection]="'none'" (onCellClick)="onCellClick($event)"
+       (mouseleave)="onMouseLeave(actionStrip1, $event)"
+       (mouseover)="onMouseOver(actionStrip1, hGrid, $event)"
+        (onDataPreLoad)="actionStrip1.hide()"> <!--[rowSelection]="'single'" -->
         <igx-column field="CustomerID" [hidden]="true"></igx-column>
-        <igx-column field="CompanyName"  [editable]="true" [pinned]="true"></igx-column>
-        <igx-column field="ContactName"></igx-column>
-        <igx-column field="ContactTitle"></igx-column>
-        <igx-column field="Country"></igx-column>
-        <igx-column field="Phone"></igx-column>
-        <igx-row-island [key]="'Orders'" [primaryKey]="'OrderID'" [autoGenerate]="false"  (onGridCreated)="gridCreated($event, 'CustomerID')" [width]="'100%'">
+        <igx-column field="CompanyName"  [editable]="true" ></igx-column> <!-- [pinned]="true" -->
+        <igx-column field="ContactName" [hidden]="true"></igx-column>
+        <igx-column field="ContactTitle" [hidden]="true"></igx-column>
+        <igx-column field="Country" [hidden]="true"></igx-column>
+        <igx-column field="Phone" [hidden]="true"></igx-column>
+
+        <igx-action-strip #actionStrip1>
+            <igx-grid-pinning-actions></igx-grid-pinning-actions>
+        </igx-action-strip>
+
+        <igx-row-island [pinning]='pinningConfig' (onDataPreLoad)="actionStrip1.hide()" (onCellEdit)="handleCellEdit($event)" [allowFiltering]="true" rowSelection="multiple" [key]="'Orders'" [primaryKey]="'OrderID'" [autoGenerate]="false"  (onGridCreated)="gridCreated($event, 'CustomerID')" [width]="'100%'">
             <igx-column field="OrderID" [hidden]="true"></igx-column>
-            <igx-column field="ShipCountry"></igx-column>
+            <igx-column field="ShipCountry" [pinned]="true"  [editable]="true"></igx-column>
             <igx-column field="ShipCity"></igx-column>
             <igx-column field="ShipAddress"></igx-column>
-            <igx-column field="OrderDate" [dataType]="'date'" [editable]="true"></igx-column>
+            <igx-column field="OrderDate" [dataType]="'date'" ></igx-column>
             <igx-row-island [key]="'Order_Details'" [primaryKey]="'ProductID'" [autoGenerate]="false" (onGridCreated)="gridCreated($event, 'OrderID')">
                 <igx-column field="ProductID" [hidden]="true"></igx-column>
                 <igx-column field="Quantity"></igx-column>
