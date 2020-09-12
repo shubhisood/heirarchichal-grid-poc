@@ -26,7 +26,7 @@
         </igx-action-strip>
 
         <igx-row-island [pinning]='pinningConfig' (onDataPreLoad)="actionStrip1.hide()" (onCellEdit)="handleCellEdit($event)" [allowFiltering]="true" rowSelection="multiple" [key]="'Orders'" [primaryKey]="'OrderID'" [autoGenerate]="false"  (onGridCreated)="gridCreated($event, 'CustomerID')" [width]="'100%'">
-            <igx-column field="OrderID" ></igx-column>
+            <igx-column field="OrderID" [hasSummary]="true" [dataType]="'number'" ></igx-column>
             <igx-column-group header="Shipping Address">
                 <igx-column field="ShipCountry"  [editable]="true"></igx-column>
                 <igx-column field="ShipCity"></igx-column>
