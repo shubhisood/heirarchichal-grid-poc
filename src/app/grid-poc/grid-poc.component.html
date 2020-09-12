@@ -27,12 +27,13 @@
 
         <igx-row-island [pinning]='pinningConfig' (onDataPreLoad)="actionStrip1.hide()" (onCellEdit)="handleCellEdit($event)" [allowFiltering]="true" rowSelection="multiple" [key]="'Orders'" [primaryKey]="'OrderID'" [autoGenerate]="false"  (onGridCreated)="gridCreated($event, 'CustomerID')" [width]="'100%'">
             <igx-column field="OrderID" [hasSummary]="true" [dataType]="'number'" ></igx-column>
-            <igx-column-group header="Shipping Address">
-                <igx-column field="ShipCountry"  [editable]="true"></igx-column>
-                <igx-column field="ShipCity"></igx-column>
-                <igx-column field="ShipAddress"></igx-column>
+            
+            <igx-column-group header="Shipping Address" [collapsible]="true" >
+                <igx-column field="ShipCountry" [visibleWhenCollapsed]="true" [editable]="true"></igx-column>
+                <igx-column field="ShipCity" [visibleWhenCollapsed]="false"></igx-column>
+                <igx-column field="ShipAddress" [visibleWhenCollapsed]="false" ></igx-column>
             </igx-column-group>
-            <igx-column field="OrderDate"  [pinned]="true" [dataType]="'date'" ></igx-column>
+            <igx-column field="OrderDate" sortable="true" [pinned]="true" [dataType]="'date'" ></igx-column>
             <igx-row-island [key]="'Order_Details'" [primaryKey]="'ProductID'" [autoGenerate]="false" (onGridCreated)="gridCreated($event, 'OrderID')">
                 <igx-column field="ProductID" [hidden]="true"></igx-column>
                 <igx-column field="Quantity"></igx-column>

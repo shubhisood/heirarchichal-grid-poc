@@ -143,4 +143,9 @@ export class HierarchicalGridLoDSampleComponent implements AfterViewInit {
     public onCellClick(args: IGridCellEventArgs) {
         this.actionStrip.show(args.cell.row);
     }
+
+    public getTooltipText(expanded) {
+        return expanded ?
+            "The column is expanded! Click here to collapse." : "The column is collapsed! Click here to expand";
+    }
 }

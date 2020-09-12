@@ -4,7 +4,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppComponent } from "./app.component";
 import { IgxHierarchicalGridModule, IgxActionStripModule,
-  IgxSwitchModule } from "igniteui-angular";
+  IgxSwitchModule, IgxTooltipModule } from "igniteui-angular";
 import { HierarchicalGridLoDSampleComponent } from "./grid-poc/grid-poc.component";
 import { RemoteLoDService } from "./grid-poc/services/data-load.service";
 import { HttpClientModule } from "@angular/common/http";
@@ -26,7 +26,8 @@ import { IgxPreventDocumentScrollModule } from "./directives/prevent-scroll.dire
 		IgxHierarchicalGridModule,
     HttpClientModule,
     IgxActionStripModule,
-    IgxSwitchModule
+    IgxSwitchModule,
+    IgxTooltipModule
   ],
   providers: [RemoteLoDService],
   entryComponents: [],
